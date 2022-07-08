@@ -31,6 +31,9 @@ class HomeController extends Controller
             ->where('a.users_id',$idUser)
             ->get();
 
+        $sumCart = $carts->sum('subtotal');
+        // dump($sumCarts);
+
         // dump($carts);
 
         $var = [
@@ -39,6 +42,7 @@ class HomeController extends Controller
             'title' => 'Barang',
             'items' => $items,
             'carts' => $carts,
+            'sumCart' => $sumCart,
         ];
 
         if (Helper::checkACL('dashboard', 'r')) {

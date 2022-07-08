@@ -101,9 +101,9 @@
                                     @foreach ($carts as $cart)
                                         <tr>
                                             <td>{{ $cart->name }}</td>
-                                            <td>{{ \Helper::setCurrency($cart->price) }}</td>
+                                            <td>Rp. {{ \Helper::setCurrency($cart->price) }}</td>
                                             <td>{{ $cart->qty }}</td>
-                                            <td>{{ \Helper::setCurrency($cart->subtotal) }}</td>
+                                            <td>Rp. {{ \Helper::setCurrency($cart->subtotal) }}</td>
                                             <td>
                                                 <a href="javascript:void(0);" id="_bDelete" data-toggle="tooltip"
                                                     data-original-title="Delete" data-id="{{ $cart->id }}"
@@ -116,7 +116,10 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-
+                                    <tr>
+                                        <td><b>Total</b></td>
+                                        <td colspan="3" class="text-right"><b> Rp. {{ \Helper::setCurrency($sumCart)}}</b></td>
+                                    </tr>
                                 </tfoot>
                             </table>
                         </div>
