@@ -321,7 +321,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "post",
-                            url: "#",
+                            url: "{{ route('dashboard.checkout') }}",
                             data: {
                                 "id": _id
                             },

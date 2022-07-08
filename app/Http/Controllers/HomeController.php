@@ -225,10 +225,14 @@ class HomeController extends Controller
 
     public function checkout()
     {
+        $idUser = Auth::user()->id;
         $carts = DB::table('carts as a')
             ->leftJoin('items as b', 'a.items_id','=','b.id')
             ->select('a.*','b.price','b.name')
             ->where('a.users_id',$idUser)
-            ->get();
+            ->delete();
+
+        $result = config('global.success.S003');
+        return response()->json($result);
     }
 }
