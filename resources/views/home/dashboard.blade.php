@@ -105,6 +105,22 @@
                                             <td>{{ $cart->qty }}</td>
                                             <td>Rp. {{ \Helper::setCurrency($cart->subtotal) }}</td>
                                             <td>
+                                                <a href="{{ route('dashboard.plusCart', $cart->id) }}" id="_bPlus"
+                                                    data-toggle="tooltip" data-original-title="Tambah"
+                                                    data-id="{{ $cart->id }}"
+                                                    class="disable btn btn-outline-success btn-xs disabling"
+                                                    data-toggle="tooltip" data-placement="bottom" title="Non-Aktifkan"> <i
+                                                        class="fas fa-plus"></i>
+                                                </a>
+
+                                                <a href="{{ route('dashboard.minusCart', $cart->id) }}" id="_bMinus"
+                                                    data-toggle="tooltip" data-original-title="Kurang"
+                                                    data-id="{{ $cart->id }}"
+                                                    class="disable btn btn-outline-warning btn-xs disabling"
+                                                    data-toggle="tooltip" data-placement="bottom" title="Non-Aktifkan"> <i
+                                                        class="fas fa-minus"></i>
+                                                </a>
+
                                                 <a href="javascript:void(0);" id="_bDelete" data-toggle="tooltip"
                                                     data-original-title="Delete" data-id="{{ $cart->id }}"
                                                     class="disable btn btn-outline-danger btn-xs disabling"
@@ -118,7 +134,18 @@
                                 <tfoot>
                                     <tr>
                                         <td><b>Total</b></td>
-                                        <td colspan="3" class="text-right"><b> Rp. {{ \Helper::setCurrency($sumCart)}}</b></td>
+                                        <td colspan="3" class="text-right"><b> Rp.
+                                                {{ \Helper::setCurrency($sumCart) }}</b></td>
+                                        <td>
+                                            @if ($sumCart > 0)
+                                                <button type="button" class="btn btn-success btn-sm"
+                                                    href="javascript:void(0);" id="_bCheckout" data-toggle="tooltip"
+                                                    data-original-title="Delete" data-id="{{ $cart->id }}"
+                                                    title="Collapse"> Checkout
+                                                </button>
+                                            @endif
+
+                                        </td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -237,6 +264,53 @@
                 Swal.fire({
                     title: 'Hapus Dari Keranjang',
                     text: "Tekan Iya jika setuju !",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#38BC8C',
+                    cancelButtonColor: '#E74C3C',
+                    confirmButtonText: 'Yes .. !',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "post",
+                            url: "/dashboard/deleteCart",
+                            data: {
+                                "id": _id
+                            },
+                            success: function(data) {
+                                // dTable.draw(false);
+
+                                Swal.fire(
+                                    data.status == 'success' ? 'Success !' :
+                                    'Failed !',
+                                    data.message,
+                                    data.status
+                                )
+
+                                if (data.status == 'success') {
+                                    setTimeout(window.location.reload(true), 1000);
+                                }
+
+                            },
+                            error: function(err) {
+                                Swal.fire(
+                                    err.status + ' !',
+                                    err.message,
+                                    err.status
+                                )
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('body').on('click', '#_bCheckout', function() {
+                var _id = $(this).data("id");
+
+                Swal.fire({
+                    title: 'Checkout ??',
+                    text: "Pastikan baranng belanjaan benar !!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#38BC8C',

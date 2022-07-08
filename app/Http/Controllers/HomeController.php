@@ -32,9 +32,6 @@ class HomeController extends Controller
             ->get();
 
         $sumCart = $carts->sum('subtotal');
-        // dump($sumCarts);
-
-        // dump($carts);
 
         $var = [
             'nav' => 'dashboard',
@@ -173,6 +170,45 @@ class HomeController extends Controller
 
     }
 
+    public function plusCart($id)
+    {
+        $data = Cart::find($id);
+        $qty = $data->qty + 1;
+
+        $item =  DB::table('items')->where('id',$data->items_id)->first();
+
+        $data->qty = $qty;
+
+        $total = $data->qty * $item->price;
+        $data->subtotal = $total;
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
+    public function minusCart($id)
+    {
+        $data = Cart::find($id);
+        $qty = $data->qty - 1;
+
+        if ($qty == 0) {
+            $data->delete();
+            return redirect()->back();
+        }
+
+        $item =  DB::table('items')->where('id',$data->items_id)->first();
+
+        $data->qty = $qty;
+
+        $total = $data->qty * $item->price;
+        $data->subtotal = $total;
+
+        $data->save();
+
+        return redirect()->back();
+    }
+
     public function deleteCart(Request $request)
     {
         $cart = Cart::find($request->id);
@@ -185,5 +221,14 @@ class HomeController extends Controller
         }
 
         return response()->json($result);
+    }
+
+    public function checkout()
+    {
+        $carts = DB::table('carts as a')
+            ->leftJoin('items as b', 'a.items_id','=','b.id')
+            ->select('a.*','b.price','b.name')
+            ->where('a.users_id',$idUser)
+            ->get();
     }
 }

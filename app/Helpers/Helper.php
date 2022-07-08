@@ -273,7 +273,7 @@ class Helper
     $first = mb_substr($words[0], 0, 1);
     $second = "";
     if(isset($words[1])) {
-        $second = $words[1];
+        $second = mb_substr($words[1], 0, 1);
     }
 
     $code = strtoupper($first).strtoupper($second).sprintf("%03d", $number);

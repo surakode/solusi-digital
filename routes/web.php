@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('dashboard/store', 'HomeController@store')->name('dashboard.store');
     Route::post('dashboard/addCart', 'HomeController@addCart')->name('dashboard.addCart');
     Route::post('dashboard/deleteCart', 'HomeController@deleteCart')->name('dashboard.deleteCart');
+    Route::get('dashboard/plusCart/{id}', 'HomeController@plusCart')->name('dashboard.plusCart');
+    Route::get('dashboard/minusCart/{id}', 'HomeController@minusCart')->name('dashboard.minusCart');
     Route::get('logout', 'AuthControllers@logout')->name('logout');
 });
 
