@@ -321,7 +321,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "post",
-                            url: "/dashboard/deleteCart",
+                            url: "#",
                             data: {
                                 "id": _id
                             },
